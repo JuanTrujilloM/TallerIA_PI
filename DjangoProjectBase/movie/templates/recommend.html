@@ -15,20 +15,26 @@
                     <button type="submit" class="btn btn-success">Buscar</button>
                 </form>
 
-                {% if recommended_movie %}
-                <div class="card mt-4 border-info">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Película recomendada</h5>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Título:</strong> {{ recommended_movie.title }}</p>
-                        <p><strong>Descripción:</strong> {{ recommended_movie.description }}</p>
-                        <p><strong>Año:</strong> {{ recommended_movie.year }}</p>
-                        <p><strong>Género:</strong> {{ recommended_movie.genre }}</p>
-                        <p><strong>Similitud:</strong> <span class="badge bg-secondary">{{ similarity|floatformat:4 }}</span></p>
-                    </div>
-                </div>
-                {% endif %}
+                        {% if recommended_movie %}
+                        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center mt-4">
+                            <div class="col">
+                                <div class="card h-100">
+                                    {% if recommended_movie.image %}
+                                        <img src="{{ recommended_movie.image.url }}" class="card-img-top" alt="Imagen de {{ recommended_movie.title }}">
+                                    {% else %}
+                                        <img src="/static/default.jpg" class="card-img-top" alt="No image">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold">{{ recommended_movie.title }}</h5>
+                                        <p class="card-text">{{ recommended_movie.description }}</p>
+                                        <p class="card-text"><strong>Género:</strong> {{ recommended_movie.genre }}</p>
+                                        <p class="card-text"><strong>Año:</strong> {{ recommended_movie.year }}</p>
+                                        <p class="card-text"><strong>Similitud:</strong> <span class="badge bg-secondary">{{ similarity|floatformat:4 }}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                 {% if error %}
                 <div class="alert alert-danger mt-3">{{ error }}</div>
                 {% endif %}
