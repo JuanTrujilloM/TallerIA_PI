@@ -1,16 +1,31 @@
 {% extends 'base.html' %} 
 {% block content %}
+<br>
+<!--Create the conecction with Bootstrap and CSS ans System of Filter movies and displays in the home Page-->
+<center><h1>Welcome to Home Page, <span style="color:#ffffff">{{name}}</span></h1></center>
 
-<div class="container">  <!-- mejora el espaciado de la pagina-->
-    <form action=""> <!-- especifica que al hacer clic en enviar, enviamos el formulario a la misma página-->
-        <div class="mb-3"> <!--agrega espacio inferior de 3 unidades-->
-            <label for="searchMovie" class="form-label"> <!--asocia un texto descriptivo con un campo de entrada en un formulario-->
-                Search for Movie:
+<div class="container">
+  <form action="">
+    <div class="mb-3">
+      <center>
+        <h4>
+            <label for="searchMovie" class="form-label">
+            Search for Movie:
             </label>
-            <input type="text" class="form-control" name="searchMovie"/>
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>   
+        </h4>
+      </center>
+      <input type="text" class="form-control" name="searchMovie">
+    </div>
+    <center>
+    <button type="submit" class="btn btn-primary">Search</button>
+    </center>
+  </form>
+
+  <center>
+    <h4>Searching for {{searchTerm}}</h4>
+  </center>
+
+
     <p>Searching for: {{searchTerm}}</p> 
     <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- define una fila en una cuadrícula con una columna en pantallas extra pequeñas y tres columnas en pantallas grandes-->
         {% for movie in movies %}

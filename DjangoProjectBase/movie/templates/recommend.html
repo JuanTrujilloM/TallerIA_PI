@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- recommend.html -->
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title mb-3 text-primary">Buscador de películas recomendadas</h3>
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="prompt" class="form-label">Describe la película que buscas:</label>
+                        <input type="text" name="prompt" id="prompt" class="form-control" required value="{{ prompt }}">
+                    </div>
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </form>
+
+                {% if recommended_movie %}
+                <div class="card mt-4 border-info">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Película recomendada</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Título:</strong> {{ recommended_movie.title }}</p>
+                        <p><strong>Descripción:</strong> {{ recommended_movie.description }}</p>
+                        <p><strong>Año:</strong> {{ recommended_movie.year }}</p>
+                        <p><strong>Género:</strong> {{ recommended_movie.genre }}</p>
+                        <p><strong>Similitud:</strong> <span class="badge bg-secondary">{{ similarity|floatformat:4 }}</span></p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,55 @@ import matplotlib
 import io
 import urllib, base64
 
+from django.shortcuts import render
+from .models import Movie
+import numpy as np
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+def recommend_movie(request):
+    recommended_movie = None
+    similarity = None
+    prompt = ""
+    if request.method == "POST":
+        prompt = request.POST.get("prompt")
+        if prompt:
+            # Cargar la API Key
+            load_dotenv('c:/Users/juant/OneDrive - Universidad EAFIT/Universidad/Proyectos/Workshops P1/TallerIA_PI/openAI.env')
+            api_key = os.environ.get('openai_apikey')
+            if not api_key:
+                return render(request, "recommend.html", {
+                    "prompt": prompt,
+                    "recommended_movie": None,
+                    "similarity": None,
+                    "error": "No se encontró la API Key de OpenAI."
+                })
+            client = OpenAI(api_key=api_key)
+
+            # Generar embedding del prompt
+            response = client.embeddings.create(
+                input=[prompt],
+                model="text-embedding-3-small"
+            )
+            prompt_emb = np.array(response.data[0].embedding, dtype=np.float32)
+
+            # Buscar la película más similar
+            max_similarity = -1
+            for movie in Movie.objects.all():
+                movie_emb = np.frombuffer(movie.emb, dtype=np.float32)
+                sim = np.dot(prompt_emb, movie_emb) / (np.linalg.norm(prompt_emb) * np.linalg.norm(movie_emb))
+                if sim > max_similarity:
+                    max_similarity = sim
+                    recommended_movie = movie
+                    similarity = sim
+
+    return render(request, "recommend.html", {
+        "prompt": prompt,
+        "recommended_movie": recommended_movie,
+        "similarity": similarity
+    })
+
 def home(request):
     #return HttpResponse('<h1>Welcome to Home Page</h1>')
     #return render(request, 'home.html')
@@ -17,7 +66,7 @@ def home(request):
         movies = Movie.objects.filter(title__icontains=searchTerm)
     else:
         movies = Movie.objects.all()
-    return render(request, 'home.html', {'searchTerm':searchTerm, 'movies':movies})
+    return render(request, 'home.html', {'searchTerm':searchTerm, 'movies':movies, "name":'Juan Esteban Trujillo'})
 
 
 def about(request):
