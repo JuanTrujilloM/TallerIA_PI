@@ -13,12 +13,21 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Cargar variables de entorno desde el archivo openAI.env en la raíz del repositorio
+# Esto hace que en entorno local se puedan leer las variables definidas en ../openAI.env
+try:
+    load_dotenv(str(BASE_DIR.parent / 'openAI.env'))
+except Exception:
+    # No fallar si el archivo no existe en producción — las variables deberían venir del entorno
+    pass
 
 
 # Quick-start development settings - unsuitable for production

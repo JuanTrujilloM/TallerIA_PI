@@ -22,9 +22,10 @@ def recommend_movie(request):
     if request.method == "POST":
         prompt = request.POST.get("prompt")
         if prompt:
-            # Cargar la API Key
-            load_dotenv('c:/Users/juant/OneDrive - Universidad EAFIT/Universidad/Proyectos/Workshops P1/TallerIA_PI/openAI.env')
-            api_key = os.environ.get('openai_apikey')
+            # La carga del .env se realiza en settings.py (si existe). Aquí
+            # leemos la variable de entorno. Buscamos primero la variante
+            # estándar en mayúsculas por compatibilidad con despliegues.
+            api_key = os.environ.get('OPENAI_API_KEY') or os.environ.get('openai_apikey')
             if not api_key:
                 return render(request, "recommend.html", {
                     "prompt": prompt,
